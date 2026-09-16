@@ -1,5 +1,5 @@
 {
-    "name": "library",
+    "name": "robopanda_library",
     "description": "",
     "dependencies": {
         "core": "*",
