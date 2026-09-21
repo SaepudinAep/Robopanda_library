@@ -40,11 +40,11 @@ namespace rekabit {
 
             case MotorChannelM3M4.M4:
                 if (direction == MotorDirectionDigital.Forward) {
-                    pins.analogWritePin(<AnalogPin>DigitalPin.P12, 0);
+                    pins.analogWritePin(AnalogPin.P12, 0);
                     pins.analogWritePin(AnalogPin.P2, 1023);
                 }
                 else {
-                    pins.analogWritePin(<AnalogPin>DigitalPin.P12, 1023);
+                    pins.analogWritePin(AnalogPin.P12, 1023);
                     pins.analogWritePin(AnalogPin.P2, 0);
                 }
                 break;
@@ -53,13 +53,13 @@ namespace rekabit {
                 if (direction == MotorDirectionDigital.Forward) {
                     pins.analogWritePin(AnalogPin.P0, 0);
                     pins.analogWritePin(AnalogPin.P1, 1023);
-                    pins.analogWritePin(<AnalogPin>DigitalPin.P12, 0);
+                    pins.analogWritePin(AnalogPin.P12, 0);
                     pins.analogWritePin(AnalogPin.P2, 1023);
                 }
                 else {
                     pins.analogWritePin(AnalogPin.P0, 1023);
                     pins.analogWritePin(AnalogPin.P1, 0);
-                    pins.analogWritePin(<AnalogPin>DigitalPin.P12, 1023);
+                    pins.analogWritePin(AnalogPin.P12, 1023);
                     pins.analogWritePin(AnalogPin.P2, 0);
                 }
                 break;

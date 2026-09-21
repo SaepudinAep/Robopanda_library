@@ -70,7 +70,7 @@ namespace rekabit {
     pins.analogSetPeriod(AnalogPin.P0, 200);
     pins.analogSetPeriod(AnalogPin.P1, 200);
     pins.analogSetPeriod(AnalogPin.P2, 200);
-    pins.analogSetPeriod(<AnalogPin>DigitalPin.P12, 200);
+    pins.analogSetPeriod(AnalogPin.P12, 200);
 
     /**
      * Drive the motor pins directly with PWM.
@@ -83,38 +83,38 @@ namespace rekabit {
         switch (motor) {
             case MotorChannel.M1:
                 if (direction == MotorDirection.Forward) {
-                    pins.digitalWritePin(M1_IN1, 0);
-                    pins.analogWritePin(<AnalogPin>M1_IN2, speed);
+                    pins.digitalWritePin(DigitalPin.P0, 0);
+                    pins.analogWritePin(AnalogPin.P1, speed);
                 }
                 else {
-                    pins.analogWritePin(<AnalogPin>M1_IN1, speed);
-                    pins.digitalWritePin(M1_IN2, 0);
+                    pins.analogWritePin(AnalogPin.P0, speed);
+                    pins.digitalWritePin(DigitalPin.P1, 0);
                 }
                 break;
 
             case MotorChannel.M2:
                 if (direction == MotorDirection.Forward) {
-                    pins.digitalWritePin(M2_IN1, 0);
-                    pins.analogWritePin(<AnalogPin>M2_IN2, speed);
+                    pins.digitalWritePin(DigitalPin.P12, 0);
+                    pins.analogWritePin(AnalogPin.P2, speed);
                 }
                 else {
-                    pins.analogWritePin(<AnalogPin>M2_IN1, speed);
-                    pins.digitalWritePin(M2_IN2, 0);
+                    pins.analogWritePin(AnalogPin.P12, speed);
+                    pins.digitalWritePin(DigitalPin.P2, 0);
                 }
                 break;
 
             case MotorChannel.All:
                 if (direction == MotorDirection.Forward) {
-                    pins.digitalWritePin(M1_IN1, 0);
-                    pins.analogWritePin(<AnalogPin>M1_IN2, speed);
-                    pins.digitalWritePin(M2_IN1, 0);
-                    pins.analogWritePin(<AnalogPin>M2_IN2, speed);
+                    pins.digitalWritePin(DigitalPin.P0, 0);
+                    pins.analogWritePin(AnalogPin.P1, speed);
+                    pins.digitalWritePin(DigitalPin.P12, 0);
+                    pins.analogWritePin(AnalogPin.P2, speed);
                 }
                 else {
-                    pins.analogWritePin(<AnalogPin>M1_IN1, speed);
-                    pins.digitalWritePin(M1_IN2, 0);
-                    pins.analogWritePin(<AnalogPin>M2_IN1, speed);
-                    pins.digitalWritePin(M2_IN2, 0);
+                    pins.analogWritePin(AnalogPin.P0, speed);
+                    pins.digitalWritePin(DigitalPin.P1, 0);
+                    pins.analogWritePin(AnalogPin.P12, speed);
+                    pins.digitalWritePin(DigitalPin.P2, 0);
                 }
                 break;
         }
@@ -132,20 +132,20 @@ namespace rekabit {
     export function brakeMotor(motor: MotorChannel): void {
         switch (motor) {
             case MotorChannel.M1:
-                pins.digitalWritePin(M1_IN1, 0);
-                pins.digitalWritePin(M1_IN2, 0);
+                pins.digitalWritePin(DigitalPin.P0, 0);
+                pins.digitalWritePin(DigitalPin.P1, 0);
                 break;
 
             case MotorChannel.M2:
-                pins.digitalWritePin(M2_IN1, 0);
-                pins.digitalWritePin(M2_IN2, 0);
+                pins.digitalWritePin(DigitalPin.P12, 0);
+                pins.digitalWritePin(DigitalPin.P2, 0);
                 break;
 
             case MotorChannel.All:
-                pins.digitalWritePin(M1_IN1, 0);
-                pins.digitalWritePin(M1_IN2, 0);
-                pins.digitalWritePin(M2_IN1, 0);
-                pins.digitalWritePin(M2_IN2, 0);
+                pins.digitalWritePin(DigitalPin.P0, 0);
+                pins.digitalWritePin(DigitalPin.P1, 0);
+                pins.digitalWritePin(DigitalPin.P12, 0);
+                pins.digitalWritePin(DigitalPin.P2, 0);
                 break;
         }
     }
