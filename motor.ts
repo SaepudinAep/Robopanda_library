@@ -157,6 +157,37 @@ namespace rekabit {
 
 
     /**
+     * Set the PWM value on the B-line (IN2) of a DC motor.
+     * M1 B-line = P1, M2 B-line = P2 (routing is kept as-is).
+     * @param motor Motor channel.
+     * @param speed Motor B-line speed (0-255). eg: 128
+     */
+    //% group="DC Motors"
+    //% weight=18
+    //% blockGap=40
+    //% blockId=rekabit_set_motor_b_line
+    //% block="set motor %motor B-line to %speed"
+    //% speed.min=0 speed.max=255
+    export function setMotorBLine(motor: MotorChannel, speed: number): void {
+        speed = rekabit.limit(speed, 0, 255) * 4;
+        switch (motor) {
+            case MotorChannel.M1:
+                pins.analogWritePin(M1_IN2, speed); // P1
+                break;
+
+            case MotorChannel.M2:
+                pins.analogWritePin(M2_IN2, speed); // P2
+                break;
+
+            case MotorChannel.All:
+                pins.analogWritePin(M1_IN2, speed); // P1
+                pins.analogWritePin(M2_IN2, speed); // P2
+                break;
+        }
+    }
+
+
+    /**
      * Disable the servo.
      * @param servo Servo channel.
      */

@@ -62,6 +62,15 @@ basic.forever(function () {
 
 
 
+    // New B-line block: Motor 1 B-line (P1) at ~50%, then Motor 2 B-line (P2) at ~100%.
+    rekabit.setMotorBLine(MotorChannel.M1, 128)
+    basic.pause(1000)
+    rekabit.setMotorBLine(MotorChannel.M2, 255)
+    basic.pause(1000)
+    rekabit.brakeMotor(MotorChannel.All)
+
+
+
     // Move Servo 1 to 0 degree.
     rekabit.setServoPosition(ServoChannel.S1, 0)
     basic.pause(1000)
