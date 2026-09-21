@@ -35,10 +35,10 @@ enum MotorDirection {
 
 // Servo Channel.
 enum ServoChannel {
-    S1 = REG_ADD_SERVO_1,
-    S2 = REG_ADD_SERVO_2,
-    S3 = REG_ADD_SERVO_3,
-    S4 = REG_ADD_SERVO_4,
+    S1 = 1,
+    S2 = 2,
+    S3 = 3,
+    S4 = 4,
 
     //% block="all"
     All = 1000,
@@ -261,7 +261,7 @@ namespace rekabit {
     export function setServoPosition(servo: ServoChannel, position: number): void {
         position = rekabit.limit(position, 0, 180);
 
-        let pulseWidth = position * 20 / 18 + 50
+        let pulseWidth = Math.round(position * 20 / 18 + 50);
         if (servo == ServoChannel.All) {
             rekabit.i2cWrite(ServoChannel.S1, pulseWidth);
             rekabit.i2cWrite(ServoChannel.S2, pulseWidth);
