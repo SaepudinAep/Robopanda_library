@@ -62,12 +62,15 @@ basic.forever(function () {
 
 
 
-    // New B-line block: Motor 1 B-line (P1) at ~50%, then Motor 2 B-line (P2) at ~100%.
-    rekabit.setMotorBLine(MotorChannel.M1, 128)
+    // New M3/M4 block: M3 forward at ~50% speed, then brake M3.
+    rekabit.runMotor34(MotorChannel34.M3, MotorDirection.Forward, 128)
     basic.pause(1000)
-    rekabit.setMotorBLine(MotorChannel.M2, 255)
+    rekabit.brakeMotor34(MotorChannel34.M3)
+
+    // M4 backward at ~100% speed, then brake M4.
+    rekabit.runMotor34(MotorChannel34.M4, MotorDirection.Backward, 255)
     basic.pause(1000)
-    rekabit.brakeMotor(MotorChannel.All)
+    rekabit.brakeMotor34(MotorChannel34.M4)
 
 
 

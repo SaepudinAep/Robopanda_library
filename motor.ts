@@ -44,6 +44,18 @@ enum ServoChannel {
     All = 1000,
 };
 
+// Motor channel used by the M3/M4 block (same physical routing as M1/M2).
+enum MotorChannel34 {
+    //% block="M3"
+    M3 = 0,
+
+    //% block="M4"
+    M4 = 1,
+
+    //% block="all"
+    All = 1000,
+};
+
 // DC motor pin mapping (direct physical pin routing).
 const M1_IN1 = DigitalPin.P0;
 const M1_IN2 = DigitalPin.P1;
@@ -157,31 +169,57 @@ namespace rekabit {
 
 
     /**
-     * Set the PWM value on the B-line (IN2) of a DC motor.
-     * M1 B-line = P1, M2 B-line = P2 (routing is kept as-is).
-     * @param motor Motor channel.
-     * @param speed Motor B-line speed (0-255). eg: 128
+     * Run the M3 or M4 motor forward/backward at speed (0-255).
+     * M3 -> P0/P1, M4 -> P12/P2 (same routing as M1/M2, relabeled only).
+     * @param motor Motor channel (M3 or M4).
+     * @param direction Motor direction.
+     * @param speed Motor speed (0-255). eg: 128
      */
     //% group="DC Motors"
-    //% weight=18
-    //% blockGap=40
-    //% blockId=rekabit_set_motor_b_line
-    //% block="set motor %motor B-line to %speed"
+    //% weight=17
+    //% blockGap=8
+    //% blockId=rekabit_run_motor_m34
+    //% block="run motor %motor %direction at speed %speed"
     //% speed.min=0 speed.max=255
-    export function setMotorBLine(motor: MotorChannel, speed: number): void {
-        speed = rekabit.limit(speed, 0, 255) * 4;
+    export function runMotor34(motor: MotorChannel34, direction: MotorDirection, speed: number): void {
         switch (motor) {
-            case MotorChannel.M1:
-                pins.analogWritePin(M1_IN2, speed); // P1
+            case MotorChannel34.M3:
+                driveMotorPins(MotorChannel.M1, direction, speed); // P0/P1
                 break;
 
-            case MotorChannel.M2:
-                pins.analogWritePin(M2_IN2, speed); // P2
+            case MotorChannel34.M4:
+                driveMotorPins(MotorChannel.M2, direction, speed); // P12/P2
                 break;
 
-            case MotorChannel.All:
-                pins.analogWritePin(M1_IN2, speed); // P1
-                pins.analogWritePin(M2_IN2, speed); // P2
+            case MotorChannel34.All:
+                driveMotorPins(MotorChannel.All, direction, speed);
+                break;
+        }
+    }
+
+
+    /**
+     * Brake the M3 or M4 motor (both pins LOW = coast).
+     * M3 -> P0/P1, M4 -> P12/P2 (same routing as M1/M2, relabeled only).
+     * @param motor Motor channel (M3 or M4).
+     */
+    //% group="DC Motors"
+    //% weight=16
+    //% blockGap=8
+    //% blockId=rekabit_brake_motor_m34
+    //% block="brake motor %motor"
+    export function brakeMotor34(motor: MotorChannel34): void {
+        switch (motor) {
+            case MotorChannel34.M3:
+                brakeMotor(MotorChannel.M1); // P0/P1
+                break;
+
+            case MotorChannel34.M4:
+                brakeMotor(MotorChannel.M2); // P12/P2
+                break;
+
+            case MotorChannel34.All:
+                brakeMotor(MotorChannel.All);
                 break;
         }
     }
