@@ -84,10 +84,10 @@ namespace rekabit {
             case MotorChannel.M1:
                 if (direction == MotorDirection.Forward) {
                     pins.digitalWritePin(M1_IN1, 0);
-                    pins.analogWritePin(M1_IN2, speed);
+                    pins.analogWritePin(<AnalogPin><unknown>M1_IN2, speed);
                 }
                 else {
-                    pins.analogWritePin(M1_IN1, speed);
+                    pins.analogWritePin(<AnalogPin><unknown>M1_IN1, speed);
                     pins.digitalWritePin(M1_IN2, 0);
                 }
                 break;
@@ -95,10 +95,10 @@ namespace rekabit {
             case MotorChannel.M2:
                 if (direction == MotorDirection.Forward) {
                     pins.digitalWritePin(M2_IN1, 0);
-                    pins.analogWritePin(M2_IN2, speed);
+                    pins.analogWritePin(<AnalogPin><unknown>M2_IN2, speed);
                 }
                 else {
-                    pins.analogWritePin(M2_IN1, speed);
+                    pins.analogWritePin(<AnalogPin><unknown>M2_IN1, speed);
                     pins.digitalWritePin(M2_IN2, 0);
                 }
                 break;
@@ -106,14 +106,14 @@ namespace rekabit {
             case MotorChannel.All:
                 if (direction == MotorDirection.Forward) {
                     pins.digitalWritePin(M1_IN1, 0);
-                    pins.analogWritePin(M1_IN2, speed);
+                    pins.analogWritePin(<AnalogPin><unknown>M1_IN2, speed);
                     pins.digitalWritePin(M2_IN1, 0);
-                    pins.analogWritePin(M2_IN2, speed);
+                    pins.analogWritePin(<AnalogPin><unknown>M2_IN2, speed);
                 }
                 else {
-                    pins.analogWritePin(M1_IN1, speed);
+                    pins.analogWritePin(<AnalogPin><unknown>M1_IN1, speed);
                     pins.digitalWritePin(M1_IN2, 0);
-                    pins.analogWritePin(M2_IN1, speed);
+                    pins.analogWritePin(<AnalogPin><unknown>M2_IN1, speed);
                     pins.digitalWritePin(M2_IN2, 0);
                 }
                 break;

@@ -1,21 +1,20 @@
-// Define separate enums so we don't conflict with or rely on motor.ts internal enums
-enum MotorChannelM3M4 {
-    //% block="M3"
-    M3 = 0,
-    //% block="M4"
-    M4 = 1,
-    //% block="all"
-    All = 1000,
-}
-
-enum MotorDirectionDigital {
-    //% block="forward"
-    Forward = 0,
-    //% block="backward"
-    Backward = 1
-}
-
 namespace rekabit {
+    export enum MotorChannelM3M4 {
+        //% block="M3"
+        M3 = 0,
+        //% block="M4"
+        M4 = 1,
+        //% block="all"
+        All = 1000,
+    }
+
+    export enum MotorDirectionDigital {
+        //% block="forward"
+        Forward = 0,
+        //% block="backward"
+        Backward = 1
+    }
+
     /**
      * Run the motor forward or backward at full speed (digital).
      * @param motor Motor channel (M3 or M4).
