@@ -5,7 +5,7 @@ namespace rekabit {
         //% block="M4"
         M4 = 1,
         //% block="all"
-        All = 1000,
+        All = 1000
     }
 
     export enum MotorDirectionDigital {
