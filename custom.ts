@@ -1,3 +1,20 @@
+// Define separate enums so we don't conflict with or rely on motor.ts internal enums
+enum MotorChannelM3M4 {
+    //% block="M3"
+    M3 = 0,
+    //% block="M4"
+    M4 = 1,
+    //% block="all"
+    All = 1000,
+}
+
+enum MotorDirectionDigital {
+    //% block="forward"
+    Forward = 0,
+    //% block="backward"
+    Backward = 1
+}
+
 namespace rekabit {
     /**
      * Run the motor forward or backward at full speed (digital).
@@ -9,10 +26,10 @@ namespace rekabit {
     //% blockGap=8
     //% blockId=rekabit_run_motor_full_digital
     //% block="run motor digital %motor %direction"
-    export function runMotorFullDigital(motor: MotorChannel34, direction: MotorDirection): void {
+    export function runMotorFullDigital(motor: MotorChannelM3M4, direction: MotorDirectionDigital): void {
         switch (motor) {
-            case MotorChannel34.M3:
-                if (direction == MotorDirection.Forward) {
+            case MotorChannelM3M4.M3:
+                if (direction == MotorDirectionDigital.Forward) {
                     pins.digitalWritePin(DigitalPin.P0, 0);
                     pins.digitalWritePin(DigitalPin.P1, 1);
                 }
@@ -22,8 +39,8 @@ namespace rekabit {
                 }
                 break;
 
-            case MotorChannel34.M4:
-                if (direction == MotorDirection.Forward) {
+            case MotorChannelM3M4.M4:
+                if (direction == MotorDirectionDigital.Forward) {
                     pins.digitalWritePin(DigitalPin.P12, 0);
                     pins.digitalWritePin(DigitalPin.P2, 1);
                 }
@@ -33,8 +50,8 @@ namespace rekabit {
                 }
                 break;
 
-            case MotorChannel34.All:
-                if (direction == MotorDirection.Forward) {
+            case MotorChannelM3M4.All:
+                if (direction == MotorDirectionDigital.Forward) {
                     pins.digitalWritePin(DigitalPin.P0, 0);
                     pins.digitalWritePin(DigitalPin.P1, 1);
                     pins.digitalWritePin(DigitalPin.P12, 0);
