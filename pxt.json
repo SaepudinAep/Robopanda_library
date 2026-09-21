@@ -16,6 +16,7 @@
         "power.ts",
         "motor.ts",
         "rgb.ts",
+        "custom.ts",
         "_locales/zh-CN/pxt-rekabit-strings.json",
         "_locales/ja/pxt-rekabit-strings.json"
     ],
