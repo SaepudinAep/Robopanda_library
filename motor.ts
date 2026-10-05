@@ -57,20 +57,20 @@ enum MotorChannel34 {
 };
 
 // DC motor pin mapping (direct physical pin routing).
-const M1_IN1 = DigitalPin.P0;
-const M1_IN2 = DigitalPin.P1;
-const M2_IN1 = DigitalPin.P12;
-const M2_IN2 = DigitalPin.P2;
+const M1_IN1 = DigitalPin.P14;
+const M1_IN2 = DigitalPin.P13;
+const M2_IN1 = DigitalPin.P16;
+const M2_IN2 = DigitalPin.P15;
 
 
 
 namespace rekabit {
 
     // Set the PWM frequency of the motor pins to 5 kHz (period = 200 us).
-    pins.analogSetPeriod(AnalogPin.P0, 200);
-    pins.analogSetPeriod(AnalogPin.P1, 200);
-    pins.analogSetPeriod(AnalogPin.P2, 200);
-    pins.analogSetPeriod(AnalogPin.P12, 200);
+    pins.analogSetPeriod(AnalogPin.P14, 200);
+    pins.analogSetPeriod(AnalogPin.P13, 200);
+    pins.analogSetPeriod(AnalogPin.P15, 200);
+    pins.analogSetPeriod(AnalogPin.P16, 200);
 
     /**
      * Drive the motor pins directly with PWM.
@@ -83,38 +83,38 @@ namespace rekabit {
         switch (motor) {
             case MotorChannel.M1:
                 if (direction == MotorDirection.Forward) {
-                    pins.digitalWritePin(DigitalPin.P0, 0);
-                    pins.analogWritePin(AnalogPin.P1, speed);
+                    pins.digitalWritePin(DigitalPin.P14, 0);
+                    pins.analogWritePin(AnalogPin.P13, speed);
                 }
                 else {
-                    pins.analogWritePin(AnalogPin.P0, speed);
-                    pins.digitalWritePin(DigitalPin.P1, 0);
+                    pins.analogWritePin(AnalogPin.P14, speed);
+                    pins.digitalWritePin(DigitalPin.P13, 0);
                 }
                 break;
 
             case MotorChannel.M2:
                 if (direction == MotorDirection.Forward) {
-                    pins.digitalWritePin(DigitalPin.P12, 0);
-                    pins.analogWritePin(AnalogPin.P2, speed);
+                    pins.digitalWritePin(DigitalPin.P16, 0);
+                    pins.analogWritePin(AnalogPin.P15, speed);
                 }
                 else {
-                    pins.analogWritePin(AnalogPin.P12, speed);
-                    pins.digitalWritePin(DigitalPin.P2, 0);
+                    pins.analogWritePin(AnalogPin.P16, speed);
+                    pins.digitalWritePin(DigitalPin.P15, 0);
                 }
                 break;
 
             case MotorChannel.All:
                 if (direction == MotorDirection.Forward) {
-                    pins.digitalWritePin(DigitalPin.P0, 0);
-                    pins.analogWritePin(AnalogPin.P1, speed);
-                    pins.digitalWritePin(DigitalPin.P12, 0);
-                    pins.analogWritePin(AnalogPin.P2, speed);
+                    pins.digitalWritePin(DigitalPin.P14, 0);
+                    pins.analogWritePin(AnalogPin.P13, speed);
+                    pins.digitalWritePin(DigitalPin.P16, 0);
+                    pins.analogWritePin(AnalogPin.P15, speed);
                 }
                 else {
-                    pins.analogWritePin(AnalogPin.P0, speed);
-                    pins.digitalWritePin(DigitalPin.P1, 0);
-                    pins.analogWritePin(AnalogPin.P12, speed);
-                    pins.digitalWritePin(DigitalPin.P2, 0);
+                    pins.analogWritePin(AnalogPin.P14, speed);
+                    pins.digitalWritePin(DigitalPin.P13, 0);
+                    pins.analogWritePin(AnalogPin.P16, speed);
+                    pins.digitalWritePin(DigitalPin.P15, 0);
                 }
                 break;
         }
@@ -132,20 +132,20 @@ namespace rekabit {
     export function brakeMotor(motor: MotorChannel): void {
         switch (motor) {
             case MotorChannel.M1:
-                pins.digitalWritePin(DigitalPin.P0, 0);
-                pins.digitalWritePin(DigitalPin.P1, 0);
+                pins.digitalWritePin(DigitalPin.P14, 0);
+                pins.digitalWritePin(DigitalPin.P13, 0);
                 break;
 
             case MotorChannel.M2:
-                pins.digitalWritePin(DigitalPin.P12, 0);
-                pins.digitalWritePin(DigitalPin.P2, 0);
+                pins.digitalWritePin(DigitalPin.P16, 0);
+                pins.digitalWritePin(DigitalPin.P15, 0);
                 break;
 
             case MotorChannel.All:
-                pins.digitalWritePin(DigitalPin.P0, 0);
-                pins.digitalWritePin(DigitalPin.P1, 0);
-                pins.digitalWritePin(DigitalPin.P12, 0);
-                pins.digitalWritePin(DigitalPin.P2, 0);
+                pins.digitalWritePin(DigitalPin.P14, 0);
+                pins.digitalWritePin(DigitalPin.P13, 0);
+                pins.digitalWritePin(DigitalPin.P16, 0);
+                pins.digitalWritePin(DigitalPin.P15, 0);
                 break;
         }
     }
