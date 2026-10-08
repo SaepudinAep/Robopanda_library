@@ -65,5 +65,62 @@ namespace rekabit {
                 break;
         }
     }
+
+    /**
+     * Brake the motor (digital).
+     * @param motor Motor channel (M3 or M4).
+     */
+    //% group="DC Motors"
+    //% weight=17
+    //% blockGap=8
+    //% blockId=rekabit_brake_motor_full_digital
+    //% block="brake motor digital %motor"
+    export function brakeMotorFullDigital(motor: MotorChannelM3M4): void {
+        switch (motor) {
+            case MotorChannelM3M4.M3:
+                pins.analogWritePin(AnalogPin.P14, 0);
+                pins.analogWritePin(AnalogPin.P13, 0);
+                break;
+
+            case MotorChannelM3M4.M4:
+                pins.analogWritePin(AnalogPin.P16, 0);
+                pins.analogWritePin(AnalogPin.P15, 0);
+                break;
+
+            case MotorChannelM3M4.All:
+                pins.analogWritePin(AnalogPin.P14, 0);
+                pins.analogWritePin(AnalogPin.P13, 0);
+                pins.analogWritePin(AnalogPin.P16, 0);
+                pins.analogWritePin(AnalogPin.P15, 0);
+                break;
+        }
+    }
+
+    export enum RekabitAnalogPin {
+        //% block="P0"
+        P0 = 0,
+        //% block="P1"
+        P1 = 1,
+        //% block="P2"
+        P2 = 2
+    }
+
+    /**
+     * Read analog value from the specified safe pin (0 - 1023).
+     * @param pin The analog pin to read from.
+     */
+    //% group="Sensors"
+    //% weight=10
+    //% blockGap=8
+    //% blockId=rekabit_analog_read
+    //% block="read analog pin %pin"
+    export function readAnalogPin(pin: RekabitAnalogPin): number {
+        switch(pin) {
+            case RekabitAnalogPin.P0: return pins.analogReadPin(AnalogPin.P0);
+            case RekabitAnalogPin.P1: return pins.analogReadPin(AnalogPin.P1);
+            case RekabitAnalogPin.P2: return pins.analogReadPin(AnalogPin.P2);
+            default: return 0;
+        }
+    }
 }
 

@@ -1,14 +1,5 @@
 /*******************************************************************************
- * Functions for REKA:BIT - DC motors and servos driver.
- *
- * NOTE: DC motor routing is changed from I2C (via PIC16F1827) to direct
- * micro:bit physical pin control using PWM.
- *
- * Pin mapping (H-bridge 2-pin per motor):
- *   M1: IN1 = P0,  IN2 = P1
- *   M2: IN1 = P12, IN2 = P2
- *
- * Servos are still controlled via the onboard PIC16F1827 (I2C).
+ * Functions for REKA:BIT servos and motors driver.
  *
  * Company: Cytron Technologies Sdn Bhd
  * Website: http://www.cytron.io
@@ -44,84 +35,12 @@ enum ServoChannel {
     All = 1000,
 };
 
-// Motor channel used by the M3/M4 block (same physical routing as M1/M2).
-enum MotorChannel34 {
-    //% block="M3"
-    M3 = 0,
-
-    //% block="M4"
-    M4 = 1,
-
-    //% block="all"
-    All = 1000,
-};
-
-// DC motor pin mapping (direct physical pin routing).
-const M1_IN1 = DigitalPin.P14;
-const M1_IN2 = DigitalPin.P13;
-const M2_IN1 = DigitalPin.P16;
-const M2_IN2 = DigitalPin.P15;
-
 
 
 namespace rekabit {
 
-    // Set the PWM frequency of the motor pins to 5 kHz (period = 200 us).
-    pins.analogSetPeriod(AnalogPin.P14, 200);
-    pins.analogSetPeriod(AnalogPin.P13, 200);
-    pins.analogSetPeriod(AnalogPin.P15, 200);
-    pins.analogSetPeriod(AnalogPin.P16, 200);
-
     /**
-     * Drive the motor pins directly with PWM.
-     * @param motor Motor channel.
-     * @param direction Motor direction.
-     * @param speed Motor speed (0-255), scaled to analogWrite range (0-1023).
-     */
-    function driveMotorPins(motor: MotorChannel, direction: MotorDirection, speed: number): void {
-        speed = rekabit.limit(speed, 0, 255) * 4;
-        switch (motor) {
-            case MotorChannel.M1:
-                if (direction == MotorDirection.Forward) {
-                    pins.digitalWritePin(DigitalPin.P14, 0);
-                    pins.analogWritePin(AnalogPin.P13, speed);
-                }
-                else {
-                    pins.analogWritePin(AnalogPin.P14, speed);
-                    pins.digitalWritePin(DigitalPin.P13, 0);
-                }
-                break;
-
-            case MotorChannel.M2:
-                if (direction == MotorDirection.Forward) {
-                    pins.digitalWritePin(DigitalPin.P16, 0);
-                    pins.analogWritePin(AnalogPin.P15, speed);
-                }
-                else {
-                    pins.analogWritePin(AnalogPin.P16, speed);
-                    pins.digitalWritePin(DigitalPin.P15, 0);
-                }
-                break;
-
-            case MotorChannel.All:
-                if (direction == MotorDirection.Forward) {
-                    pins.digitalWritePin(DigitalPin.P14, 0);
-                    pins.analogWritePin(AnalogPin.P13, speed);
-                    pins.digitalWritePin(DigitalPin.P16, 0);
-                    pins.analogWritePin(AnalogPin.P15, speed);
-                }
-                else {
-                    pins.analogWritePin(AnalogPin.P14, speed);
-                    pins.digitalWritePin(DigitalPin.P13, 0);
-                    pins.analogWritePin(AnalogPin.P16, speed);
-                    pins.digitalWritePin(DigitalPin.P15, 0);
-                }
-                break;
-        }
-    }
-
-    /**
-     * Brake the motor (both pins LOW = coast).
+     * Brake the motor
      * @param motor Motor channel. eg: Motor.M1, Motor.M2
      */
     //% group="DC Motors"
@@ -132,20 +51,20 @@ namespace rekabit {
     export function brakeMotor(motor: MotorChannel): void {
         switch (motor) {
             case MotorChannel.M1:
-                pins.digitalWritePin(DigitalPin.P14, 0);
-                pins.digitalWritePin(DigitalPin.P13, 0);
+                rekabit.i2cWrite(REG_ADD_M1A, 0);
+                rekabit.i2cWrite(REG_ADD_M1B, 0);
                 break;
 
             case MotorChannel.M2:
-                pins.digitalWritePin(DigitalPin.P16, 0);
-                pins.digitalWritePin(DigitalPin.P15, 0);
+                rekabit.i2cWrite(REG_ADD_M2A, 0);
+                rekabit.i2cWrite(REG_ADD_M2B, 0);
                 break;
 
             case MotorChannel.All:
-                pins.digitalWritePin(DigitalPin.P14, 0);
-                pins.digitalWritePin(DigitalPin.P13, 0);
-                pins.digitalWritePin(DigitalPin.P16, 0);
-                pins.digitalWritePin(DigitalPin.P15, 0);
+                rekabit.i2cWrite(REG_ADD_M1A, 0);
+                rekabit.i2cWrite(REG_ADD_M1B, 0);
+                rekabit.i2cWrite(REG_ADD_M2A, 0);
+                rekabit.i2cWrite(REG_ADD_M2B, 0);
                 break;
         }
     }
@@ -164,62 +83,43 @@ namespace rekabit {
     //% block="run motor %motor %direction at speed %speed"
     //% speed.min=0 speed.max=255
     export function runMotor(motor: MotorChannel, direction: MotorDirection, speed: number): void {
-        driveMotorPins(motor, direction, speed);
-    }
-
-
-    /**
-     * Run the M3 or M4 motor forward/backward at speed (0-255).
-     * M3 -> P0/P1, M4 -> P12/P2 (same routing as M1/M2, relabeled only).
-     * @param motor Motor channel (M3 or M4).
-     * @param direction Motor direction.
-     * @param speed Motor speed (0-255). eg: 128
-     */
-    //% group="DC Motors"
-    //% weight=17
-    //% blockGap=8
-    //% blockId=rekabit_run_motor_m34
-    //% block="run motor %motor %direction at speed %speed"
-    //% speed.min=0 speed.max=255
-    export function runMotor34(motor: MotorChannel34, direction: MotorDirection, speed: number): void {
+        speed = rekabit.limit(speed, 0, 255);
         switch (motor) {
-            case MotorChannel34.M3:
-                driveMotorPins(MotorChannel.M1, direction, speed); // P0/P1
+            case MotorChannel.M1:
+                if (direction == MotorDirection.Forward) {
+                    rekabit.i2cWrite(REG_ADD_M1A, speed);
+                    rekabit.i2cWrite(REG_ADD_M1B, 0);
+                }
+                else {
+                    rekabit.i2cWrite(REG_ADD_M1A, 0);
+                    rekabit.i2cWrite(REG_ADD_M1B, speed);
+                }
                 break;
 
-            case MotorChannel34.M4:
-                driveMotorPins(MotorChannel.M2, direction, speed); // P12/P2
+            case MotorChannel.M2:
+                if (direction == MotorDirection.Forward) {
+                    rekabit.i2cWrite(REG_ADD_M2A, speed);
+                    rekabit.i2cWrite(REG_ADD_M2B, 0);
+                }
+                else {
+                    rekabit.i2cWrite(REG_ADD_M2A, 0);
+                    rekabit.i2cWrite(REG_ADD_M2B, speed);
+                }
                 break;
 
-            case MotorChannel34.All:
-                driveMotorPins(MotorChannel.All, direction, speed);
-                break;
-        }
-    }
-
-
-    /**
-     * Brake the M3 or M4 motor (both pins LOW = coast).
-     * M3 -> P0/P1, M4 -> P12/P2 (same routing as M1/M2, relabeled only).
-     * @param motor Motor channel (M3 or M4).
-     */
-    //% group="DC Motors"
-    //% weight=16
-    //% blockGap=8
-    //% blockId=rekabit_brake_motor_m34
-    //% block="brake motor %motor"
-    export function brakeMotor34(motor: MotorChannel34): void {
-        switch (motor) {
-            case MotorChannel34.M3:
-                brakeMotor(MotorChannel.M1); // P0/P1
-                break;
-
-            case MotorChannel34.M4:
-                brakeMotor(MotorChannel.M2); // P12/P2
-                break;
-
-            case MotorChannel34.All:
-                brakeMotor(MotorChannel.All);
+            case MotorChannel.All:
+                if (direction == MotorDirection.Forward) {
+                    rekabit.i2cWrite(REG_ADD_M1A, speed);
+                    rekabit.i2cWrite(REG_ADD_M1B, 0);
+                    rekabit.i2cWrite(REG_ADD_M2A, speed);
+                    rekabit.i2cWrite(REG_ADD_M2B, 0);
+                }
+                else {
+                    rekabit.i2cWrite(REG_ADD_M1A, 0);
+                    rekabit.i2cWrite(REG_ADD_M1B, speed);
+                    rekabit.i2cWrite(REG_ADD_M2A, 0);
+                    rekabit.i2cWrite(REG_ADD_M2B, speed);
+                }
                 break;
         }
     }
@@ -239,7 +139,7 @@ namespace rekabit {
             rekabit.i2cWrite(ServoChannel.S1, 0);
             rekabit.i2cWrite(ServoChannel.S2, 0);
             rekabit.i2cWrite(ServoChannel.S3, 0);
-            rekabit.i2cWrite(ServoChannel.S4, 0);
+			rekabit.i2cWrite(ServoChannel.S4, 0);
         }
         else {
             rekabit.i2cWrite(servo, 0);
@@ -266,7 +166,7 @@ namespace rekabit {
             rekabit.i2cWrite(ServoChannel.S1, pulseWidth);
             rekabit.i2cWrite(ServoChannel.S2, pulseWidth);
             rekabit.i2cWrite(ServoChannel.S3, pulseWidth);
-            rekabit.i2cWrite(ServoChannel.S4, pulseWidth);
+			rekabit.i2cWrite(ServoChannel.S4, pulseWidth);
         }
         else {
             rekabit.i2cWrite(servo, pulseWidth);
@@ -274,4 +174,3 @@ namespace rekabit {
     }
 
 }
-
